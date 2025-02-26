@@ -22,6 +22,11 @@ jobs:
       - name: Grant execute permissions to gradlew
         run: chmod +x ./android/gradlew
 
+        
+      - name: Grant read permissions to gradle scripts
+        run: chmod +r ./android/settings.gradle
+
+
       # Run the build process
       - name: Build debug APK
         run: cd android && ./gradlew assembleDebug --stacktrace --info --debug
