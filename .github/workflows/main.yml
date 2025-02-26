@@ -1,0 +1,39 @@
+name: Generate debug APK
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  apk:
+    name: Generate debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      # Set up JDK 17 (to match Android Gradle plugin requirement)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: '17'
+
+      # Grant execute permissions to gradlew
+      - name: Grant execute permissions to gradlew
+        run: chmod +x ./android/gradlew
+
+      # Run the build process
+      - name: Build debug APK
+        run: cd android && ./gradlew assembleDebug --stacktrace 
+
+      # Rename APK for output
+      - name: Rename APK 
+        run:
+          mv "./app/build/outputs/apk/debug/app-debug.apk" "./app/build/outputs/apk/debug/${{ env.OUTPUT_NAME }}.apk"
+        
+      # Upload the APK as an artifact
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.OUTPUT_NAME }}
+          path: app/build/outputs/apk/debug/${{ env.OUTPUT_NAME }}.apk
