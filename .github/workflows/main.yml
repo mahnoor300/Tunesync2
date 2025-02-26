@@ -29,7 +29,7 @@ jobs:
 
       # Run the build process
       - name: Build debug APK
-        run: cd android && ./gradlew assembleDebug --stacktrace --info --debug
+        run: cd android && ./gradlew assembleDebug --stacktrace 
 
       # Rename APK for output
       - name: Rename APK 
